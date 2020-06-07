@@ -1,0 +1,10 @@
+### Recursion
+- Termination: Base case is reached
+- Memory: Each recursion step require more memory
+- Infinite: StackOverflowException
+
+### Loop
+- Termination: false condition
+- Memory: Each loop doesn't require more memory
+- Infinite: Just run
+

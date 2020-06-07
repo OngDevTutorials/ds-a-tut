@@ -1,0 +1,19 @@
+#Fibonacci
+fib = 1 1 2 3 5 8 13 21 34 55 89 ....
+
+fib(2) = fib(1) + fib(0)
+
+fib(n) = fib(n-1) + fib(n-2)
+
+fib(1) = fib(0) + fib(-1)
+
+n<2 : fib(n) = 1
+n>=2 : fib(n) = fib(n-1) + fib(n-2)
+
+n = 4
+
+fib(4) = fib(3) + fib(2)
+= fib(2) + fib(1) + fib(1) + fib(0)
+= fib(2) + 3
+= fib(1) + fib(0) +3
+= 5

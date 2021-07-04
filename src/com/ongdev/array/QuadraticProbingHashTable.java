@@ -1,4 +1,6 @@
-package com.ongdev.hashtable;
+package com.ongdev.array;
+
+import com.ongdev.hashtable.OpenAddressingHashTableBase;
 
 public class QuadraticProbingHashTable<K,V> extends OpenAddressingHashTableBase<K,V> {
     public QuadraticProbingHashTable() {

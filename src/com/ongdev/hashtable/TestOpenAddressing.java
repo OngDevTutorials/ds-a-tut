@@ -1,5 +1,8 @@
 package com.ongdev.hashtable;
 
+import com.ongdev.array.LinearProbingHashTable;
+import com.ongdev.array.QuadraticProbingHashTable;
+
 import java.util.Random;
 
 public class TestOpenAddressing {

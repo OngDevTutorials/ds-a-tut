@@ -1,4 +1,6 @@
-package com.ongdev.hashtable;
+package com.ongdev.array;
+
+import com.ongdev.hashtable.OpenAddressingHashTableBase;
 
 public class LinearProbingHashTable<K, V> extends OpenAddressingHashTableBase<K,V> {
     private static final int LINEAR_CONSTANT = 13;

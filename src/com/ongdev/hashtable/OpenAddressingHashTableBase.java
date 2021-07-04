@@ -146,37 +146,35 @@ public abstract class OpenAddressingHashTableBase<K,V> implements HashTableADT<K
         final int offset = hashCodeToIndex(key.hashCode());
 
         for (int i = offset, x=1, firstTombstoneIndex = -1; ; i = hashCodeToIndex(offset + probe(x++))) {
-            if (keys[i] == TOMBSTONE && firstTombstoneIndex == -1) {
-                firstTombstoneIndex = i;
-            } else if (keys[i] == null) {
-                // Insert luoonnnnn
-                // Check firstTombstoneIndex
+            if (keys[i] == TOMBSTONE) {
                 if (firstTombstoneIndex == -1) {
-                   usedSlots++;
-                   keyCount++;
-                   keys[i] = key;
-                   values[i] = value;
+                    firstTombstoneIndex = i;
+                }
+            } else if (keys[i] != null) {
+                if (keys[i].equals(key)) {
+                    V oldValue = values[i];
+                   if(firstTombstoneIndex == -1) {
+                       values[i] = value;
+                   } else {
+                       keys[firstTombstoneIndex] = key;
+                       values[firstTombstoneIndex] = value;
+                       keys[i] = TOMBSTONE;
+                       values[i] = null;
+                   }
+                   return oldValue;
+                }
+            } else {
+                if(firstTombstoneIndex == -1) {
+                    usedSlots++;
+                    keyCount++;
+                    keys[i] = key;
+                    values[i] = value;
                 } else {
                     keyCount++;
                     keys[firstTombstoneIndex] = key;
                     values[firstTombstoneIndex] = value;
                 }
-
                 return null;
-            } else {
-                // Check xem key co trung khong
-                if (keys[i].equals(key)) {
-                    V oldValue = values[i];
-                    if (firstTombstoneIndex == -1) {
-                        values[i] = value;
-                    } else {
-                        keys[i] = TOMBSTONE;
-                        values[i] = null;
-                        keys[firstTombstoneIndex] = key;
-                        values[firstTombstoneIndex] = value;
-                    }
-                    return oldValue;
-                }
             }
         }
     }
@@ -190,12 +188,14 @@ public abstract class OpenAddressingHashTableBase<K,V> implements HashTableADT<K
         final int offset = hashCodeToIndex(key.hashCode());
 
         for (int i = offset, x=1, firstTombstoneIndex = -1; ; i = hashCodeToIndex(offset + probe(x++))) {
-            if (keys[i] == TOMBSTONE && firstTombstoneIndex == -1) {
-                firstTombstoneIndex = i;
+            if (keys[i] == TOMBSTONE) {
+                if (firstTombstoneIndex == -1) {
+                    firstTombstoneIndex = i;
+                }
             } else if (keys[i] != null){
-                if (keys[i].equals(key)) {
-                    if (firstTombstoneIndex != -1) {
-                        keys[firstTombstoneIndex] = keys[i];
+                if(keys[i].equals(key)) {
+                    if(firstTombstoneIndex != -1) {
+                        keys[firstTombstoneIndex] = key;
                         values[firstTombstoneIndex] = values[i];
                         keys[i] = TOMBSTONE;
                         values[i] = null;
@@ -214,18 +214,20 @@ public abstract class OpenAddressingHashTableBase<K,V> implements HashTableADT<K
         final int offset = hashCodeToIndex(key.hashCode());
 
         for (int i = offset, x=1, firstTombstoneIndex = -1; ; i = hashCodeToIndex(offset + probe(x++))) {
-            if (keys[i] == TOMBSTONE && firstTombstoneIndex == -1) {
-                firstTombstoneIndex = i;
+            if (keys[i] == TOMBSTONE) {
+                if (firstTombstoneIndex == -1) {
+                    firstTombstoneIndex = i;
+                }
             } else if (keys[i] != null){
-                if (keys[i].equals(key)) {
-                    if (firstTombstoneIndex != -1) {
-                        keys[firstTombstoneIndex] = keys[i];
+                if(keys[i].equals(key)) {
+                    V value = values[i];
+                    if(firstTombstoneIndex != -1) {
+                        keys[firstTombstoneIndex] = key;
                         values[firstTombstoneIndex] = values[i];
                         keys[i] = TOMBSTONE;
                         values[i] = null;
-                        return values[firstTombstoneIndex];
                     }
-                    return values[i];
+                    return value;
                 }
             } else return null;
         }
@@ -243,13 +245,11 @@ public abstract class OpenAddressingHashTableBase<K,V> implements HashTableADT<K
 
             if (keys[i] == null) return null;
 
-            if (keys[i].equals(key)) {
+            if(keys[i] == key){
                 keyCount--;
                 V oldValue = values[i];
-
                 keys[i] = TOMBSTONE;
                 values[i] = null;
-
                 return oldValue;
             }
         }

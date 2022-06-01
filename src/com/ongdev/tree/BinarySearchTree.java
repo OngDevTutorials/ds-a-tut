@@ -65,7 +65,24 @@ public class BinarySearchTree<T extends Comparable<T>> implements TreeADT<T> {
     }
 
     private Iterator<T> postOrderTraverse() {
-        return null;
+        final int expectedCount = this.nodeCount;
+        StackADT<Node<T>> stack = new LinkedListBasedStack<>();
+        this.traversePostOrder(stack, this.root);
+
+        return new Iterator<T>() {
+
+            @Override
+            public boolean hasNext() {
+                if (expectedCount != nodeCount) throw new ConcurrentModificationException();
+                return root != null && !stack.isEmpty();
+            }
+
+            @Override
+            public T next() {
+                if (expectedCount != nodeCount) throw new ConcurrentModificationException();
+                return stack.pop().getData();
+            }
+        };
     }
 
     private Iterator<T> inOderTraverse() {
@@ -198,5 +215,13 @@ public class BinarySearchTree<T extends Comparable<T>> implements TreeADT<T> {
     private T maxLeft(Node node) {
         while (node.getRight() != null) node = node.getRight();
         return (T) node.getData();
+    }
+
+    private void traversePostOrder(StackADT<Node<T>> stack, Node<T> node) {
+        if (node != null) {
+            stack.push(node);
+            this.traversePostOrder(stack, node.getRight());
+            this.traversePostOrder(stack, node.getLeft());
+        }
     }
 }
